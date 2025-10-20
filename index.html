@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gnius Playbooks • Pocket Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gradient-start-color: #8E2DE2;
+      --gradient-end-color: #4A00E0;
+      --gradient-start-rgb: 142, 45, 226;
+      --gradient-end-rgb: 74, 0, 224;
+
+      --bg-dark: #0A0915;
+      --bg-panel: #16152A;
+      --bg-panel-secondary: #211E3D;
+      --text-light: #F0F0F0;
+      --text-muted: #A9A4E8;
+      --font-main: 'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background-color: var(--bg-panel-secondary); border-radius: 6px; }
+
+    html, body {
+      height: 100%; 
+      margin: 0;
+      color: var(--text-light);
+      font-family: var(--font-main);
+      font-size: 16px;
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% 50%, rgba(var(--gradient-end-rgb), 0.1), transparent 50%);
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      gap: 20px;
+    }
+
+    header {
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gradient-start-color), var(--gradient-end-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .controls {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+      padding: 0 20px;
+    }
+
+    .select-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 250px;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 1rem;
+      border: 1px solid var(--bg-panel-secondary);
+      background: var(--bg-panel);
+      color: var(--text-light);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+      font-family: var(--font-main);
+      cursor: pointer;
+    }
+
+    select:focus {
+      border-color: var(--gradient-start-color);
+      box-shadow: 0 0 8px rgba(var(--gradient-start-rgb), 0.6);
+    }
+
+    select option:disabled {
+      color: #888;
+    }
+
+    .embed-container {
+      flex: 1;
+      position: relative;
+      background: var(--bg-panel);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid var(--bg-panel-secondary);
+      min-height: 400px;
+    }
+
+    .embed-container.has-border::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      border-radius: 26px;
+      background: conic-gradient(from var(--angle, 0deg) at 50% 50%, var(--gradient-end-color), var(--gradient-start-color), var(--gradient-end-color));
+      animation: rotateGradient 10s linear infinite;
+    }
+
+    @keyframes rotateGradient {
+      0% { --angle: 0deg; }
+      100% { --angle: 360deg; }
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 24px;
+    }
+
+    .placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      flex-direction: column;
+      gap: 16px;
+      color: var(--text-muted);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .placeholder svg {
+      width: 80px;
+      height: 80px;
+      opacity: 0.3;
+    }
+
+    .placeholder-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .placeholder-subtext {
+      font-size: 0.875rem;
+      max-width: 400px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+        gap: 16px;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      .subtitle {
+        font-size: 0.875rem;
+      }
+
+      .controls {
+        flex-direction: column;
+        gap: 12px;
+        padding: 0;
+      }
+
+      .select-wrapper {
+        min-width: 100%;
+      }
+
+      .embed-container {
+        border-radius: 16px;
+        min-height: 300px;
+      }
+
+      .embed-container.has-border::before {
+        border-radius: 18px;
+      }
+
+      iframe {
+        border-radius: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Gnius Playbooks</h1>
+      <div class="subtitle">pocket edition</div>
+    </header>
+
+    <div class="controls">
+      <div class="select-wrapper">
+        <label for="grade-select">Grado Escolar</label>
+        <select id="grade-select">
+          <option value="" disabled selected>Selecciona un grado...</option>
+          <optgroup label="Kinder">
+            <option value="K1">Kinder 1</option>
+            <option value="K2">Kinder 2</option>
+            <option value="K3">Kinder 3</option>
+          </optgroup>
+          <optgroup label="Primaria">
+            <option value="P1">1° Primaria</option>
+            <option value="P2">2° Primaria</option>
+            <option value="P3">3° Primaria</option>
+            <option value="P4">4° Primaria</option>
+            <option value="P5">5° Primaria</option>
+            <option value="P6">6° Primaria</option>
+          </optgroup>
+          <optgroup label="Secundaria">
+            <option value="S1">1° Secundaria</option>
+            <option value="S2">2° Secundaria</option>
+            <option value="S3">3° Secundaria</option>
+          </optgroup>
+          <optgroup label="Preparatoria">
+            <option value="H1">1° Preparatoria</option>
+            <option value="H2">2° Preparatoria</option>
+            <option value="H3">3° Preparatoria</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="select-wrapper">
+        <label for="mission-select">Misión</label>
+        <select id="mission-select" disabled>
+          <option value="" disabled selected>Primero selecciona un grado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="embed-container" id="embed-container">
+      <div class="placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+        </svg>
+        <div class="placeholder-text">Selecciona un grado y misión</div>
+        <div class="placeholder-subtext">Elige tu grado escolar y la misión que deseas explorar para comenzar</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const gradeSelect = document.getElementById('grade-select');
+    const missionSelect = document.getElementById('mission-select');
+    const embedContainer = document.getElementById('embed-container');
+
+    // Definición de misiones
+    const missions = {
+      standard: [
+        { name: 'Onboarding 1', code: 'OB01' },
+        { name: 'Onboarding 2', code: 'OB02' },
+        { name: 'Onboarding 3', code: 'OB03' },
+        { name: 'Onboarding 4', code: 'OB04' },
+        { name: 'Misión de Tecnología 1', code: 'MT01' },
+        { name: 'Misión de Tecnología 2', code: 'MT02' },
+        { name: 'Misión de Tecnología 3', code: 'MT03' },
+        { name: 'Misión de Tecnología 4', code: 'MT04' },
+        { name: 'Misión de Tecnología 5', code: 'MT05' },
+        { name: 'Misión de Tecnología 6', code: 'MT06' },
+        { name: 'Misión de Tecnología 7', code: 'MT07' },
+        { name: 'Misión de Tecnología 8', code: 'MT08' },
+        { name: 'Misión de Tecnología 9', code: 'MT09' },
+        { name: 'Misión de Tecnología 10', code: 'MT10' },
+        { name: 'Misión de Tecnología 11', code: 'MT11' },
+        { name: 'Misión de Tecnología 12', code: 'MT12' },
+        { name: 'Misión de Tecnología 13', code: 'MT13' },
+        { name: 'Misión de Tecnología 14', code: 'MT14' },
+        { name: 'Misión de Tecnología 15', code: 'MT15' },
+        { name: 'Misión de Tecnología 16', code: 'MT16' },
+        { name: 'Misión de Tecnología 17', code: 'MT17' },
+        { name: 'Misión de Tecnología 18', code: 'MT18' },
+        { name: 'Misión de Tecnología 19', code: 'MT19' },
+        { name: 'Misión de Tecnología 20', code: 'MT20' },
+        { name: 'Misión de Tecnología 21', code: 'MT21' },
+        { name: 'Misión de Tecnología 22', code: 'MT22' },
+        { name: 'Ciudadanía Digital 1', code: 'CD01' },
+        { name: 'Ciudadanía Digital 2', code: 'CD02' },
+        { name: 'Ciudadanía Digital 3', code: 'CD03' },
+        { name: 'Ciudadanía Digital 4', code: 'CD04' },
+        { name: 'Ciudadanía Digital 5', code: 'CD05' },
+        { name: 'Ciudadanía Digital 6', code: 'CD06' },
+        { name: 'Ciudadanía Digital 7', code: 'CD07' },
+        { name: 'Ciudadanía Digital 8', code: 'CD08' },
+        { name: 'Ciudadanía Digital 9', code: 'CD09' },
+        { name: 'Ciudadanía Digital 10', code: 'CD10' },
+        { name: 'Ciudadanía Digital 11', code: 'CD11' },
+        { name: 'Ciudadanía Digital 12', code: 'CD12' },
+        { name: 'Ciudadanía Digital 13', code: 'CD13' },
+        { name: 'Ciudadanía Digital 14', code: 'CD14' },
+        { name: 'Ciudadanía Digital 15', code: 'CD15' },
+        { name: 'Ciudadanía Digital 16', code: 'CD16' }
+      ],
+      P5: [
+        { name: 'Onboarding 1', code: 'OB01' },
+        { name: 'Onboarding 2', code: 'OB02' },
+        { name: 'Onboarding 3', code: 'OB03' },
+        { name: 'Onboarding 4', code: 'OB04' },
+        { name: 'Misión 1', code: 'MT01A' },
+        { name: 'Misión 2', code: 'MT01B' },
+        { name: 'Misión 3', code: 'MT02A' },
+        { name: 'Misión 4', code: 'MT02B' },
+        { name: 'Misión 5', code: 'MT03A' },
+        { name: 'Misión 6', code: 'MT03B' },
+        { name: 'Misión 7', code: 'MT04A' },
+        { name: 'Misión 8', code: 'MT04B' },
+        { name: 'Misión 9', code: 'MT05A' },
+        { name: 'Misión 10', code: 'MT05B' },
+        { name: 'Misión 11', code: 'MT06A' },
+        { name: 'Misión 12', code: 'MT06B' },
+        { name: 'Misión 13', code: 'MT07A' },
+        { name: 'Misión 14', code: 'MT07B' },
+        { name: 'Misión 15', code: 'MT08A' },
+        { name: 'Misión 16', code: 'MT08B' },
+        { name: 'Misión 17', code: 'MT09A' },
+        { name: 'Misión 18', code: 'MT09B' },
+        { name: 'Misión 19', code: 'MT10A' },
+        { name: 'Misión 20', code: 'MT10B' },
+        { name: 'Misión 21', code: 'MT11A' },
+        { name: 'Misión 22', code: 'MT11B' },
+        { name: 'Ciudadanía Digital 1', code: 'CD01' },
+        { name: 'Ciudadanía Digital 2', code: 'CD02' },
+        { name: 'Ciudadanía Digital 3', code: 'CD03' },
+        { name: 'Ciudadanía Digital 4', code: 'CD04' },
+        { name: 'Ciudadanía Digital 5', code: 'CD05' },
+        { name: 'Ciudadanía Digital 6', code: 'CD06' },
+        { name: 'Ciudadanía Digital 7', code: 'CD07' },
+        { name: 'Ciudadanía Digital 8', code: 'CD08' },
+        { name: 'Ciudadanía Digital 9', code: 'CD09' },
+        { name: 'Ciudadanía Digital 10', code: 'CD10' },
+        { name: 'Ciudadanía Digital 11', code: 'CD11' },
+        { name: 'Ciudadanía Digital 12', code: 'CD12' },
+        { name: 'Ciudadanía Digital 13', code: 'CD13' },
+        { name: 'Ciudadanía Digital 14', code: 'CD14' },
+        { name: 'Ciudadanía Digital 15', code: 'CD15' },
+        { name: 'Ciudadanía Digital 16', code: 'CD16' }
+      ]
+    };
+
+    // Actualizar misiones al cambiar el grado
+    gradeSelect.addEventListener('change', function() {
+      const grade = this.value;
+      missionSelect.disabled = false;
+      missionSelect.innerHTML = '<option value="" disabled selected>Selecciona una misión...</option>';
+      
+      // Usar misiones especiales para P5, estándar para el resto
+      const missionList = grade === 'P5' ? missions.P5 : missions.standard;
+      
+      missionList.forEach(mission => {
+        const option = document.createElement('option');
+        option.value = mission.code;
+        option.textContent = mission.name;
+        missionSelect.appendChild(option);
+      });
+
+      // Limpiar el embed
+      showPlaceholder();
+    });
+
+    // Cargar embed al seleccionar misión
+    missionSelect.addEventListener('change', function() {
+      const grade = gradeSelect.value;
+      const mission = this.value;
+      
+      if (grade && mission) {
+        loadEmbed(grade, mission);
+      }
+    });
+
+    function loadEmbed(grade, mission) {
+      const url = `https://gnius-club.github.io/AIF_${grade}_${mission}`;
+      
+      embedContainer.innerHTML = `<iframe src="${url}" allow="autoplay; fullscreen"></iframe>`;
+      embedContainer.classList.add('has-border');
+    }
+
+    function showPlaceholder() {
+      embedContainer.innerHTML = `
+        <div class="placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+          <div class="placeholder-text">Selecciona un grado y misión</div>
+          <div class="placeholder-subtext">Elige tu grado escolar y la misión que deseas explorar para comenzar</div>
+        </div>
+      `;
+      embedContainer.classList.remove('has-border');
+    }
+  </script>
+</body>
+</html>
