@@ -281,13 +281,17 @@
     const missionSelect = document.getElementById('mission-select');
     const embedContainer = document.getElementById('embed-container');
 
-    // Definición de misiones
-    const missions = {
-      standard: [
+    // ─────────────────────────────────────────────────────────────
+    // Bloques reutilizables de misiones
+    // ─────────────────────────────────────────────────────────────
+    const blocks = {
+      onboarding: [
         { name: 'Onboarding 1', code: 'OB01' },
         { name: 'Onboarding 2', code: 'OB02' },
         { name: 'Onboarding 3', code: 'OB03' },
-        { name: 'Onboarding 4', code: 'OB04' },
+        { name: 'Onboarding 4', code: 'OB04' }
+      ],
+      tecnologiaStandard: [
         { name: 'Misión de Tecnología 1', code: 'MT01' },
         { name: 'Misión de Tecnología 2', code: 'MT02' },
         { name: 'Misión de Tecnología 3', code: 'MT03' },
@@ -309,33 +313,9 @@
         { name: 'Misión de Tecnología 19', code: 'MT19' },
         { name: 'Misión de Tecnología 20', code: 'MT20' },
         { name: 'Misión de Tecnología 21', code: 'MT21' },
-        { name: 'Misión de Tecnología 22', code: 'MT22' },
-        { name: 'Ciudadanía Digital 1', code: 'CD01' },
-        { name: 'Ciudadanía Digital 2', code: 'CD02' },
-        { name: 'Ciudadanía Digital 3', code: 'CD03' },
-        { name: 'Ciudadanía Digital 4', code: 'CD04' },
-        { name: 'Ciudadanía Digital 5', code: 'CD05' },
-        { name: 'Ciudadanía Digital 6', code: 'CD06' },
-        { name: 'Ciudadanía Digital 7', code: 'CD07' },
-        { name: 'Ciudadanía Digital 8', code: 'CD08' },
-        { name: 'Ciudadanía Digital 9', code: 'CD09' },
-        { name: 'Ciudadanía Digital 10', code: 'CD10' },
-        { name: 'Ciudadanía Digital 11', code: 'CD11' },
-        { name: 'Ciudadanía Digital 12', code: 'CD12' },
-        { name: 'Ciudadanía Digital 13', code: 'CD13' },
-        { name: 'Ciudadanía Digital 14', code: 'CD14' },
-        { name: 'Ciudadanía Digital 15', code: 'CD15' },
-        { name: 'Ciudadanía Digital 16', code: 'CD16' },
-        { name: 'Proyecto Final 1', code: 'PFi1' },
-        { name: 'Proyecto Final 2', code: 'PFi2' },
-        { name: 'Proyecto Final 3', code: 'PFi3' },
-        { name: 'Proyecto Final 4', code: 'PFi4' }
+        { name: 'Misión de Tecnología 22', code: 'MT22' }
       ],
-      P5: [
-        { name: 'Onboarding 1', code: 'OB01' },
-        { name: 'Onboarding 2', code: 'OB02' },
-        { name: 'Onboarding 3', code: 'OB03' },
-        { name: 'Onboarding 4', code: 'OB04' },
+      tecnologiaP5: [
         { name: 'Misión 1', code: 'MT01A' },
         { name: 'Misión 2', code: 'MT01B' },
         { name: 'Misión 3', code: 'MT02A' },
@@ -357,7 +337,9 @@
         { name: 'Misión 19', code: 'MT10A' },
         { name: 'Misión 20', code: 'MT10B' },
         { name: 'Misión 21', code: 'MT11A' },
-        { name: 'Misión 22', code: 'MT11B' },
+        { name: 'Misión 22', code: 'MT11B' }
+      ],
+      ciudadania: [
         { name: 'Ciudadanía Digital 1', code: 'CD01' },
         { name: 'Ciudadanía Digital 2', code: 'CD02' },
         { name: 'Ciudadanía Digital 3', code: 'CD03' },
@@ -373,23 +355,76 @@
         { name: 'Ciudadanía Digital 13', code: 'CD13' },
         { name: 'Ciudadanía Digital 14', code: 'CD14' },
         { name: 'Ciudadanía Digital 15', code: 'CD15' },
-        { name: 'Ciudadanía Digital 16', code: 'CD16' },
+        { name: 'Ciudadanía Digital 16', code: 'CD16' }
+      ],
+      proyectosFinales4: [
         { name: 'Proyecto Final 1', code: 'PFi1' },
         { name: 'Proyecto Final 2', code: 'PFi2' },
         { name: 'Proyecto Final 3', code: 'PFi3' },
         { name: 'Proyecto Final 4', code: 'PFi4' }
+      ],
+      proyectosFinales7: [
+        { name: 'Proyecto Final 1', code: 'PFi1' },
+        { name: 'Proyecto Final 2', code: 'PFi2' },
+        { name: 'Proyecto Final 3', code: 'PFi3' },
+        { name: 'Proyecto Final 4', code: 'PFi4' },
+        { name: 'Proyecto Final 5', code: 'PFi5' },
+        { name: 'Proyecto Final 6', code: 'PFi6' },
+        { name: 'Proyecto Final 7', code: 'PFi7' }
+      ],
+      proyectoFinalPrototipado: [
+        { name: 'Proyecto Final Prototipado', code: 'PFp1' }
       ]
     };
+
+    // ─────────────────────────────────────────────────────────────
+    // Reglas por grado
+    // ─────────────────────────────────────────────────────────────
+    // Grados de preescolar reciben 7 proyectos finales en lugar de 4
+    const preescolarGrades = ['K1', 'K2', 'K3'];
+
+    // Grados que reciben el Proyecto Final Prototipado (3° primaria en adelante)
+    const gradesWithPrototipado = ['P3', 'P4', 'P5', 'P6', 'S1', 'S2', 'S3', 'H1', 'H2', 'H3'];
+
+    // Misiones cuyo playbook NO es por grado, sino compartido entre todos los grados
+    // que las contienen. Mapea código → URL absoluta del playbook compartido.
+    const sharedMissionUrls = {
+      'PFp1': 'https://gnius-club.github.io/AIF_PFp1/'
+    };
+
+    // ─────────────────────────────────────────────────────────────
+    // Composición de la lista de misiones según el grado
+    // ─────────────────────────────────────────────────────────────
+    function getMissionsForGrade(grade) {
+      const tecnologia = grade === 'P5' ? blocks.tecnologiaP5 : blocks.tecnologiaStandard;
+      const finales = preescolarGrades.includes(grade)
+        ? blocks.proyectosFinales7
+        : blocks.proyectosFinales4;
+      const prototipado = gradesWithPrototipado.includes(grade)
+        ? blocks.proyectoFinalPrototipado
+        : [];
+
+      return [
+        ...blocks.onboarding,
+        ...tecnologia,
+        ...blocks.ciudadania,
+        ...finales,
+        ...prototipado
+      ];
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Eventos
+    // ─────────────────────────────────────────────────────────────
 
     // Actualizar misiones al cambiar el grado
     gradeSelect.addEventListener('change', function() {
       const grade = this.value;
       missionSelect.disabled = false;
       missionSelect.innerHTML = '<option value="" disabled selected>Selecciona una misión...</option>';
-      
-      // Usar misiones especiales para P5, estándar para el resto
-      const missionList = grade === 'P5' ? missions.P5 : missions.standard;
-      
+
+      const missionList = getMissionsForGrade(grade);
+
       missionList.forEach(mission => {
         const option = document.createElement('option');
         option.value = mission.code;
@@ -412,8 +447,11 @@
     });
 
     function loadEmbed(grade, mission) {
-      const url = `https://gnius-club.github.io/AIF_${grade}_${mission}`;
-      
+      // Si la misión es compartida (no depende del grado), usar su URL absoluta.
+      // De lo contrario, construir la URL con el patrón AIF_{grade}_{mission}.
+      const url = sharedMissionUrls[mission]
+        || `https://gnius-club.github.io/AIF_${grade}_${mission}`;
+
       embedContainer.innerHTML = `<iframe src="${url}" allow="autoplay; fullscreen"></iframe>`;
       embedContainer.classList.add('has-border');
     }
@@ -423,7 +461,7 @@
         <div class="placeholder">
           <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-          </svg>
+        </svg>
           <div class="placeholder-text">Selecciona un grado y misión</div>
           <div class="placeholder-subtext">Elige tu grado escolar y la misión que deseas explorar para comenzar</div>
         </div>
